@@ -1,0 +1,780 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <title>MoveTech — Tecnología para moverse más y vivir mejor</title>
+  <meta name="description" content="Propuesta estudiantil para reducir el sedentarismo y prevenir la obesidad en Costa Rica. Retos saludables, puntos, recompensas y cápsulas educativas." />
+
+  <!-- PWA / Manifest -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#16a34a" />
+  <meta name="color-scheme" content="light" />
+
+  <!-- iOS PWA -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MoveTech" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+
+  <!-- Windows / Edge -->
+  <meta name="application-name" content="MoveTech" />
+  <meta name="msapplication-TileColor" content="#16a34a" />
+
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============ NAVBAR ============ -->
+  <header class="navbar">
+    <div class="container nav-content">
+      <a href="#inicio" class="brand">
+        <span class="brand-icon">M</span>
+        <span class="brand-text">MoveTech</span>
+      </a>
+      <nav class="nav-links">
+        <a href="#inicio">Inicio</a>
+        <a href="#problema">Problema</a>
+        <a href="#solucion">Solución</a>
+        <a href="#educacion">Educación</a>
+        <a href="#recompensas">Recompensas</a>
+        <a href="#validacion">Validación</a>
+        <a href="#equipo">Equipo</a>
+        <a href="#app" class="nav-cta">Ver app</a>
+        <button id="installBtn" class="install-btn" hidden>📲 Instalar app</button>
+      </nav>
+      <button class="nav-toggle" id="navToggle" aria-label="Abrir menú">☰</button>
+    </div>
+  </header>
+
+  <!-- ============ HERO / INICIO ============ -->
+  <section id="inicio" class="hero">
+    <div class="container hero-grid">
+      <div class="hero-text">
+        <span class="badge">Proyecto estudiantil de innovación</span>
+        <h1>MoveTech: tecnología para <span class="accent">moverse más</span> y vivir mejor</h1>
+        <p class="lead">
+          Una propuesta estudiantil para reducir el sedentarismo y prevenir la obesidad
+          en adultos de 20 a 59 años en zonas urbanas de Costa Rica.
+        </p>
+        <div class="hero-actions">
+          <a href="#app" class="btn btn-primary">Ver app</a>
+          <a href="#problema" class="btn btn-ghost">Conocer el problema</a>
+        </div>
+        <div class="hero-stats">
+          <div class="stat">
+            <strong>96.567</strong>
+            <span>casos de obesidad notificados en CR (2024)</span>
+          </div>
+          <div class="stat">
+            <strong>78,9%</strong>
+            <span>de los casos son adultos de 20 a 59 años</span>
+          </div>
+          <div class="stat">
+            <strong>1.778</strong>
+            <span>tasa nacional por 100.000 habitantes</span>
+          </div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-card">
+          <div class="hero-card-header">
+            <span class="dot dot-green"></span>
+            <span class="dot dot-blue"></span>
+            <span class="dot dot-light"></span>
+          </div>
+          <div class="hero-card-body">
+            <h3>Reto del día</h3>
+            <p>Caminar 5 minutos</p>
+            <div class="hero-progress"><div class="hero-progress-fill"></div></div>
+            <div class="hero-card-footer">
+              <span>+20 pts</span>
+              <button class="btn btn-mini" disabled>Demo</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ PROBLEMA ============ -->
+  <section id="problema" class="section section-light">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">El problema</span>
+        <h2>Obesidad y sedentarismo en Costa Rica</h2>
+        <p class="section-sub">
+          Datos reales del <strong>Informe Anual de Incidencia de Obesidad
+          en Costa Rica 2024</strong>, Ministerio de Salud, Dirección de
+          Vigilancia de la Salud.
+        </p>
+      </div>
+
+      <!-- Big stats -->
+      <div class="big-stats">
+        <div class="big-stat">
+          <strong>96.567</strong>
+          <span>casos notificados de obesidad en 2024</span>
+        </div>
+        <div class="big-stat">
+          <strong>1.778</strong>
+          <span>tasa nacional por 100.000 habitantes</span>
+        </div>
+        <div class="big-stat">
+          <strong>1,98×</strong>
+          <span>más prevalencia en mujeres que en hombres</span>
+        </div>
+        <div class="big-stat">
+          <strong>119</strong>
+          <span>fallecimientos con diagnóstico principal de obesidad</span>
+        </div>
+      </div>
+
+      <div class="grid grid-2">
+        <article class="card">
+          <h3>Un problema de salud pública prioritario</h3>
+          <p>
+            La obesidad afecta la morbilidad, mortalidad y calidad de vida de la
+            población. Según el Ministerio de Salud, es un evento de
+            <strong>notificación obligatoria</strong> y representa un desafío
+            creciente para el sistema sanitario costarricense.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Adultos de 20 a 59 años: el grupo más afectado</h3>
+          <p>
+            Este grupo concentra el <strong>78,9% de los casos notificados</strong>,
+            con una tasa de 2.324,4 por 100.000 habitantes. La tasa más alta se
+            registra entre los <strong>55 y 59 años (3.239,3)</strong>.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Mayor carga en mujeres adultas</h3>
+          <p>
+            Las mujeres presentan tasas consistentemente más altas a partir de los
+            20 años, especialmente entre los 40 y 59 años. La diferencia con los
+            hombres alcanza <strong>+2.307 casos por 100.000</strong> en el grupo
+            de 50-54 años.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Zonas urbanas y la Gran Área Metropolitana</h3>
+          <p>
+            Las regiones <strong>Central Este (tasa 2.904)</strong>,
+            <strong>Central Sur (36.174 casos)</strong> y
+            <strong>Huetar Caribe</strong> presentan la mayor carga. El patrón se
+            asocia a factores urbanísticos, acceso a ultraprocesados y estilos de
+            vida sedentarios.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Contexto internacional</h3>
+          <p>
+            Según la FAO (2023), la obesidad adulta en Costa Rica pasó de
+            <strong>17,3% en 2000 a 31,4% en 2022</strong>. La Federación Mundial
+            de Obesidad proyecta un <strong>aumento del 115%</strong> de adultos
+            con obesidad entre 2010 y 2030.
+          </p>
+        </article>
+        <article class="card">
+          <h3>Mortalidad e impacto productivo</h3>
+          <p>
+            En 2024 fallecieron <strong>119 personas</strong> con diagnóstico
+            principal de obesidad; el <strong>56%</strong> eran hombres. Además,
+            1 de cada 4 muertes por enfermedades endocrinas y metabólicas ocurre
+            en población en <strong>edad productiva (15-64 años)</strong>.
+          </p>
+        </article>
+      </div>
+
+      <!-- Provincias / Regiones -->
+      <div class="data-block">
+        <h3 class="data-block-title">Distribución por región rectora de salud</h3>
+        <p class="data-block-sub">
+          Tasas por 100.000 habitantes y número de casos notificados (2024).
+        </p>
+        <div class="region-list">
+          <div class="region-row">
+            <span class="region-name">Central Este</span>
+            <div class="region-bar"><div class="region-fill" style="width: 100%"></div></div>
+            <span class="region-tasa">2.904,0</span>
+            <span class="region-num">16.698 casos</span>
+          </div>
+          <div class="region-row">
+            <span class="region-name">Central Sur</span>
+            <div class="region-bar"><div class="region-fill" style="width: 81%"></div></div>
+            <span class="region-tasa">2.345,8</span>
+            <span class="region-num">36.174 casos</span>
+          </div>
+          <div class="region-row">
+            <span class="region-name">Huetar Caribe</span>
+            <div class="region-bar"><div class="region-fill" style="width: 67%"></div></div>
+            <span class="region-tasa">1.954,3</span>
+            <span class="region-num">9.363 casos</span>
+          </div>
+          <div class="region-row">
+            <span class="region-name">Huetar Norte</span>
+            <div class="region-bar"><div class="region-fill" style="width: 65%"></div></div>
+            <span class="region-tasa">1.884,9</span>
+            <span class="region-num">5.064 casos</span>
+          </div>
+          <div class="region-row">
+            <span class="region-name">Central Norte</span>
+            <div class="region-bar"><div class="region-fill" style="width: 59%"></div></div>
+            <span class="region-tasa">1.713,4</span>
+            <span class="region-num">17.927 casos</span>
+          </div>
+          <div class="region-row">
+            <span class="region-name">Brunca</span>
+            <div class="region-bar"><div class="region-fill" style="width: 32%"></div></div>
+            <span class="region-tasa">933,6</span>
+            <span class="region-num">3.521 casos</span>
+          </div>
+          <div class="region-row">
+            <span class="region-name">Chorotega</span>
+            <div class="region-bar"><div class="region-fill" style="width: 27%"></div></div>
+            <span class="region-tasa">784,8</span>
+            <span class="region-num">3.723 casos</span>
+          </div>
+          <div class="region-row">
+            <span class="region-name">Central Occidente</span>
+            <div class="region-bar"><div class="region-fill" style="width: 27%"></div></div>
+            <span class="region-tasa">772,2</span>
+            <span class="region-num">1.774 casos</span>
+          </div>
+          <div class="region-row">
+            <span class="region-name">Pacífico Central</span>
+            <div class="region-bar"><div class="region-fill" style="width: 25%"></div></div>
+            <span class="region-tasa">724,8</span>
+            <span class="region-num">2.323 casos</span>
+          </div>
+        </div>
+        <p class="source-note">
+          Fuente: Ministerio de Salud de Costa Rica · Dirección de Vigilancia de
+          la Salud · Bases de notificación obligatoria VE01 · 2024.
+        </p>
+      </div>
+
+      <!-- Provincias destacadas -->
+      <div class="grid grid-3 mt-32">
+        <div class="info-card">
+          <span class="info-icon">🏙️</span>
+          <h4>Cartago: tasa más alta</h4>
+          <p>
+            Provincia con la mayor tasa de obesidad del país. Cantones como
+            <strong>La Unión y Paraíso</strong> superan los 4.000 casos por
+            100.000 habitantes.
+          </p>
+        </div>
+        <div class="info-card">
+          <span class="info-icon">🏛️</span>
+          <h4>San José y Heredia</h4>
+          <p>
+            Cantones como <strong>San Pablo, Barva, Dota, Moravia, Aserrí</strong>
+            registran tasas extremadamente elevadas, asociadas a entornos urbanos.
+          </p>
+        </div>
+        <div class="info-card">
+          <span class="info-icon">🌅</span>
+          <h4>Guanacaste y Puntarenas</h4>
+          <p>
+            Presentan las tasas más bajas. Podría deberse a estilos de vida más
+            activos, pero también podría reflejar <strong>subregistro</strong> en
+            servicios de salud.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ SOLUCIÓN ============ -->
+  <section id="solucion" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Nuestra solución</span>
+        <h2>El ciclo MoveTech</h2>
+        <p class="section-sub">
+          Un sistema digital, educativo y preventivo, diseñado para acompañar al
+          usuario en cambios pequeños y sostenibles.
+        </p>
+      </div>
+      <div class="cycle">
+        <div class="cycle-step"><span>1</span><h4>Detectar</h4><p>Identificamos hábitos sedentarios simulados.</p></div>
+        <div class="cycle-step"><span>2</span><h4>Analizar</h4><p>Revisamos el progreso del usuario en la app.</p></div>
+        <div class="cycle-step"><span>3</span><h4>Proponer retos</h4><p>Pequeñas acciones diarias que mueven el cuerpo.</p></div>
+        <div class="cycle-step"><span>4</span><h4>Motivar</h4><p>Gamificación con puntos, niveles y recompensas.</p></div>
+        <div class="cycle-step"><span>5</span><h4>Educar</h4><p>Cápsulas breves sobre salud, nutrición y prevención.</p></div>
+        <div class="cycle-step"><span>6</span><h4>Mantener</h4><p>Sostener el cambio con hábitos a largo plazo.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EDUCACIÓN ============ -->
+  <section id="educacion" class="section section-light">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Educación y prevención</span>
+        <h2>Información clara para tomar mejores decisiones</h2>
+      </div>
+      <div class="grid grid-3">
+        <div class="info-card"><span class="info-icon">⚖️</span><h4>Obesidad</h4><p>En Costa Rica, la obesidad adulta pasó de 17,3% (2000) a 31,4% (2022) según la FAO. Es un problema prioritario de salud pública.</p></div>
+        <div class="info-card"><span class="info-icon">🧪</span><h4>Colesterol</h4><p>Su exceso puede acumularse en las arterias. Mantener hábitos activos y alimentación equilibrada ayuda a cuidarlo.</p></div>
+        <div class="info-card"><span class="info-icon">❤️</span><h4>Riesgo cardiovascular</h4><p>El sobrepeso y la obesidad se relacionan con 1,6 millones de muertes prematuras al año por enfermedades no transmisibles (OMS).</p></div>
+        <div class="info-card"><span class="info-icon">💺</span><h4>Sedentarismo</h4><p>El patrón se asocia a entornos urbanos, acceso a ultraprocesados y estilos de vida poco activos en la Gran Área Metropolitana.</p></div>
+        <div class="info-card"><span class="info-icon">🥗</span><h4>Nutrición general</h4><p>El Ministerio de Salud recomienda fortalecer la educación nutricional y el control de ambientes obesogénicos.</p></div>
+        <div class="info-card"><span class="info-icon">🐟</span><h4>Omega 3</h4><p>Ácido graso esencial presente en pescados, semillas de chía, linaza y nueces. Aporta a la salud cardiovascular dentro de una dieta equilibrada.</p></div>
+      </div>
+      <div class="notice">
+        <strong>Aviso:</strong> El contenido educativo debe validarse con
+        profesionales de salud. MoveTech no sustituye la atención médica ni
+        nutricional.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ COMERCIOS Y RECOMPENSAS ============ -->
+  <section id="recompensas" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Comercios aliados</span>
+        <h2>Un sistema de puntos que motiva</h2>
+        <p class="section-sub">
+          Los usuarios ganan puntos al completar retos. Estos puntos podrían
+          canjearse en comercios aliados.
+        </p>
+      </div>
+      <div class="grid grid-3">
+        <div class="ally-card"><span class="ally-icon">🏋️</span><h4>Gimnasios</h4></div>
+        <div class="ally-card"><span class="ally-icon">🥦</span><h4>Tiendas saludables</h4></div>
+        <div class="ally-card"><span class="ally-icon">💊</span><h4>Farmacias</h4></div>
+        <div class="ally-card"><span class="ally-icon">☕</span><h4>Cafeterías saludables</h4></div>
+        <div class="ally-card"><span class="ally-icon">⚽</span><h4>Centros deportivos</h4></div>
+        <div class="ally-card"><span class="ally-icon">🚴</span><h4>Espacios activos</h4></div>
+      </div>
+      <div class="notice notice-blue">
+        Los comercios y recompensas son <strong>simulados</strong> para este
+        prototipo académico.
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ VALIDACIÓN ============ -->
+  <section id="validacion" class="section section-light">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Validación</span>
+        <h2>Cómo probaríamos MoveTech</h2>
+      </div>
+      <div class="grid grid-4">
+        <div class="card mini"><h4>Encuestas</h4><p>Conocer hábitos y necesidades del público objetivo.</p></div>
+        <div class="card mini"><h4>Entrevistas</h4><p>Profundizar en motivaciones y barreras.</p></div>
+        <div class="card mini"><h4>Prueba piloto</h4><p>Aplicar el prototipo en un grupo reducido.</p></div>
+        <div class="card mini"><h4>Revisión profesional</h4><p>Con médicos, nutricionistas o profesionales de salud.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ EQUIPO ============ -->
+  <section id="equipo" class="section">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Sobre el equipo</span>
+        <h2>Estudiantes proponiendo soluciones</h2>
+      </div>
+      <p class="team-text">
+        Como estudiantes, queremos demostrar que la tecnología puede ayudar a
+        mejorar hábitos y generar conciencia sobre la salud. MoveTech es nuestra
+        propuesta para acercar la prevención a la vida cotidiana.
+      </p>
+
+      <!-- Docente a cargo -->
+      <div class="team-block">
+        <h3 class="team-block-title">Docente a cargo</h3>
+        <div class="team-grid team-grid-single">
+          <div class="member-card teacher">
+            <div class="member-avatar">MR</div>
+            <h4>Manuel Antonio Ramírez Pérez</h4>
+            <span class="member-role">Docente a cargo del equipo</span>
+            <a class="member-mail" href="mailto:mramirez@colegiomiravalle.com">
+              mramirez@colegiomiravalle.com
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Estudiantes -->
+      <div class="team-block">
+        <h3 class="team-block-title">Estudiantes</h3>
+        <div class="team-grid">
+          <div class="member-card">
+            <div class="member-avatar">EH</div>
+            <h4>Estela Sofía Hernández Barboza</h4>
+            <span class="member-role">Estudiante</span>
+            <a class="member-mail" href="mailto:ehernandez@cmiravalle.com">
+              ehernandez@cmiravalle.com
+            </a>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar">FM</div>
+            <h4>Fabián Alberto Muñoz López</h4>
+            <span class="member-role">Estudiante</span>
+            <a class="member-mail" href="mailto:fmunozl@cmiravalle.com">
+              fmunozl@cmiravalle.com
+            </a>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar">AU</div>
+            <h4>Alejandro Ulloa Brenes</h4>
+            <span class="member-role">Estudiante</span>
+            <a class="member-mail" href="mailto:aulloa@cmiravalle.com">
+              aulloa@cmiravalle.com
+            </a>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar">SV</div>
+            <h4>Sergio Valverde González</h4>
+            <span class="member-role">Estudiante</span>
+            <a class="member-mail" href="mailto:svalverde@cmiravalle.com">
+              svalverde@cmiravalle.com
+            </a>
+          </div>
+          <div class="member-card">
+            <div class="member-avatar">CM</div>
+            <h4>Caleb Méndez Araya</h4>
+            <span class="member-role">Estudiante</span>
+            <a class="member-mail" href="mailto:cmendez@cmiravalle.com">
+              cmendez@cmiravalle.com
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <p class="team-text small">
+        Este prototipo se basa en el <strong>Informe Anual: Incidencia de
+        Obesidad en Costa Rica — Vigilancia Epidemiológica, datos de
+        notificación obligatoria 2024</strong>, elaborado por la Nutricionista
+        Epidemióloga Ivannia Caravaca Rodríguez, Dirección de Vigilancia de la
+        Salud, Ministerio de Salud de Costa Rica.
+      </p>
+    </div>
+  </section>
+
+  <!-- ============ APP MOCKUP ============ -->
+  <section id="app" class="section section-app">
+    <div class="container">
+      <div class="section-header">
+        <span class="eyebrow">Prototipo de app</span>
+        <h2>Explorá MoveTech en acción</h2>
+        <p class="section-sub">
+          Esta es una simulación interactiva. Todos los datos se guardan en tu
+          navegador (localStorage) y son únicamente con fines educativos.
+        </p>
+      </div>
+
+      <div class="phone-wrapper">
+        <div class="phone">
+          <div class="phone-notch"></div>
+          <div class="phone-screen" id="phoneScreen">
+
+            <!-- Pantalla: Bienvenida -->
+            <div class="screen active" data-screen="welcome">
+              <div class="screen-center">
+                <div class="app-logo">M</div>
+                <h2>MoveTech</h2>
+                <p class="motivational">
+                  Pequeños movimientos, grandes cambios. Comencemos juntos.
+                </p>
+                <button class="btn btn-primary btn-block" data-go="consent">Comenzar</button>
+              </div>
+            </div>
+
+            <!-- Pantalla: Consentimiento -->
+            <div class="screen" data-screen="consent">
+              <div class="screen-scroll">
+                <h3>Consentimiento educativo</h3>
+                <p class="consent-text">
+                  Autorizo el uso de mis datos simulados únicamente con fines
+                  educativos y de estudio académico. Entiendo que no se expondrán
+                  datos sensibles y que esta plataforma no sustituye la atención
+                  profesional en salud.
+                </p>
+                <label class="checkbox">
+                  <input type="checkbox" id="consentCheck" />
+                  <span>Acepto los términos del uso educativo</span>
+                </label>
+                <button class="btn btn-primary btn-block" id="consentBtn" disabled>
+                  Aceptar y continuar
+                </button>
+                <p class="micro-note">
+                  Tu aceptación se guarda en tu navegador (localStorage).
+                </p>
+              </div>
+            </div>
+
+            <!-- Pantalla: Dashboard -->
+            <div class="screen" data-screen="dashboard">
+              <div class="screen-scroll">
+                <div class="dash-top">
+                  <div>
+                    <span class="micro">Hola,</span>
+                    <h3>Usuario MoveTech</h3>
+                  </div>
+                  <div class="level-pill" id="dashLevelPill">Nivel 1</div>
+                </div>
+
+                <div class="dash-points">
+                  <span class="micro">Puntos acumulados</span>
+                  <strong id="dashPoints">0</strong>
+                </div>
+
+                <div class="dash-grid">
+                  <div class="dash-card">
+                    <span class="micro">Retos completados</span>
+                    <strong id="dashChallenges">0</strong>
+                  </div>
+                  <div class="dash-card">
+                    <span class="micro">Tiempo sedentario simulado</span>
+                    <strong id="dashSedentary">0 min</strong>
+                  </div>
+                </div>
+
+                <div class="dash-progress">
+                  <div class="dash-progress-head">
+                    <span class="micro">Progreso diario</span>
+                    <span class="micro" id="dashProgressLabel">0%</span>
+                  </div>
+                  <div class="bar"><div class="bar-fill" id="dashProgressBar"></div></div>
+                </div>
+
+                <div class="motivational-box" id="motivationalBox">
+                  ¡Cada paso cuenta! Hoy es un gran día para moverte un poquito más.
+                </div>
+              </div>
+            </div>
+
+            <!-- Pantalla: Retos -->
+            <div class="screen" data-screen="challenges">
+              <div class="screen-scroll">
+                <h3>Retos saludables</h3>
+                <p class="micro">Completá los retos para sumar puntos.</p>
+                <div id="challengesList" class="list"></div>
+                <button class="btn btn-ghost btn-block" id="resetChallengesBtn">
+                  Reiniciar retos del día
+                </button>
+              </div>
+            </div>
+
+            <!-- Pantalla: Puntos y niveles -->
+            <div class="screen" data-screen="points">
+              <div class="screen-scroll">
+                <h3>Puntos y niveles</h3>
+                <div class="big-points">
+                  <span class="micro">Total de puntos</span>
+                  <strong id="pointsTotal">0</strong>
+                </div>
+                <div class="level-info">
+                  <div class="level-pill big" id="levelPill">Nivel 1</div>
+                  <span class="micro" id="nextLevelLabel">Próximo: Nivel 2 (100 pts)</span>
+                </div>
+                <div class="bar"><div class="bar-fill" id="levelBar"></div></div>
+                <h4>Historial de puntos</h4>
+                <ul class="history" id="pointsHistory"></ul>
+              </div>
+            </div>
+
+            <!-- Pantalla: Recompensas -->
+            <div class="screen" data-screen="rewards">
+              <div class="screen-scroll">
+                <h3>Recompensas</h3>
+                <p class="micro">Canjeá tus puntos por recompensas simuladas.</p>
+                <div id="rewardsList" class="list"></div>
+                <h4>Historial de canjes</h4>
+                <ul class="history" id="redemptionsHistory"></ul>
+              </div>
+            </div>
+
+            <!-- Pantalla: Cápsulas -->
+            <div class="screen" data-screen="capsules">
+              <div class="screen-scroll">
+                <h3>Cápsulas educativas</h3>
+                <p class="micro">Leé y aprendé. La primera lectura otorga 10 pts.</p>
+                <div id="capsulesList" class="list"></div>
+              </div>
+            </div>
+
+            <!-- Pantalla: Progreso -->
+            <div class="screen" data-screen="progress">
+              <div class="screen-scroll">
+                <h3>Tu progreso</h3>
+                <div class="progress-row">
+                  <span>Retos completados</span>
+                  <strong id="progChallenges">0</strong>
+                </div>
+                <div class="bar"><div class="bar-fill" id="progChallengesBar"></div></div>
+
+                <div class="progress-row">
+                  <span>Puntos obtenidos</span>
+                  <strong id="progPoints">0</strong>
+                </div>
+                <div class="bar"><div class="bar-fill" id="progPointsBar"></div></div>
+
+                <div class="progress-row">
+                  <span>Cápsulas leídas</span>
+                  <strong id="progCapsules">0</strong>
+                </div>
+                <div class="bar"><div class="bar-fill" id="progCapsulesBar"></div></div>
+
+                <div class="progress-row">
+                  <span>Canjes realizados</span>
+                  <strong id="progRedemptions">0</strong>
+                </div>
+                <div class="bar"><div class="bar-fill" id="progRedemptionsBar"></div></div>
+              </div>
+            </div>
+
+            <!-- Pantalla: Perfil -->
+            <div class="screen" data-screen="profile">
+              <div class="screen-scroll">
+                <div class="profile-head">
+                  <div class="avatar">U</div>
+                  <div>
+                    <h3>Usuario MoveTech</h3>
+                    <span class="micro">Cuenta simulada</span>
+                  </div>
+                </div>
+                <div class="profile-item">
+                  <span class="micro">Objetivo</span>
+                  <p>Reducir el sedentarismo diario</p>
+                </div>
+                <div class="profile-item">
+                  <span class="micro">Consentimiento</span>
+                  <p id="profileConsent">No aceptado</p>
+                </div>
+                <button class="btn btn-ghost btn-block" id="resetProgressBtn">
+                  Reiniciar progreso
+                </button>
+                <button class="btn btn-danger btn-block" id="clearAllBtn">
+                  Borrar datos y consentimiento
+                </button>
+                <p class="micro-note">
+                  No pedimos peso real, diagnósticos ni datos sensibles. Todo es
+                  simulado, con fines educativos.
+                </p>
+              </div>
+            </div>
+
+            <!-- Toast -->
+            <div class="toast" id="toast"></div>
+          </div>
+
+          <!-- Tab bar -->
+          <nav class="phone-tabs" id="phoneTabs">
+            <button data-go="dashboard" class="tab"><span>🏠</span><small>Inicio</small></button>
+            <button data-go="challenges" class="tab"><span>🎯</span><small>Retos</small></button>
+            <button data-go="points" class="tab"><span>⭐</span><small>Puntos</small></button>
+            <button data-go="rewards" class="tab"><span>🎁</span><small>Premios</small></button>
+            <button data-go="capsules" class="tab"><span>📖</span><small>Aprender</small></button>
+            <button data-go="progress" class="tab"><span>📊</span><small>Progreso</small></button>
+            <button data-go="profile" class="tab"><span>👤</span><small>Perfil</small></button>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="container footer-grid">
+      <div>
+        <div class="brand brand-footer">
+          <span class="brand-icon">M</span>
+          <span class="brand-text">MoveTech</span>
+        </div>
+        <p class="footer-text">
+          Prototipo académico estudiantil. No sustituye la atención médica ni
+          nutricional profesional.
+        </p>
+      </div>
+      <div>
+        <h5>Secciones</h5>
+        <a href="#problema">Problema</a>
+        <a href="#solucion">Solución</a>
+        <a href="#educacion">Educación</a>
+        <a href="#app">Prototipo de app</a>
+      </div>
+      <div>
+        <h5>Fuentes</h5>
+        <p class="footer-text">
+          Ministerio de Salud de Costa Rica — Dirección de Vigilancia de la
+          Salud. <em>Informe Anual: Incidencia de Obesidad en Costa Rica,
+          Vigilancia Epidemiológica, 2024.</em>
+        </p>
+        <p class="footer-text">
+          FAO (2023) · Federación Mundial de Obesidad — World Obesity Atlas 2025.
+        </p>
+        <p class="footer-text">
+          Datos, comercios y recompensas de la app son simulados con fines
+          educativos.
+        </p>
+      </div>
+    </div>
+    <div class="footer-bottom container">
+      <p>
+        © 2026 <strong>MoveTech</strong> · Proyecto estudiantil de innovación · Colegio Miravalle, Costa Rica.
+      </p>
+      <p class="footer-credits">
+        Docente a cargo: <strong>Manuel Antonio Ramírez Pérez</strong>. Estudiantes:
+        <strong>Estela Sofía Hernández Barboza</strong>,
+        <strong>Fabián Alberto Muñoz López</strong>,
+        <strong>Alejandro Ulloa Brenes</strong>,
+        <strong>Sergio Valverde González</strong> y
+        <strong>Caleb Méndez Araya</strong>.
+      </p>
+      <p class="footer-credits">
+        Todos los derechos reservados. Prohibida la reproducción total o parcial sin autorización de los autores.
+      </p>
+    </div>
+  </footer>
+
+  <!-- ============ MODAL iOS / instrucciones de instalación ============ -->
+  <div class="pwa-modal" id="pwaModal" hidden>
+    <div class="pwa-modal-content">
+      <button class="pwa-modal-close" id="pwaModalClose" aria-label="Cerrar">×</button>
+      <div class="pwa-modal-icon">📲</div>
+      <h3>Instalá MoveTech en tu celular</h3>
+      <div id="pwaIosHelp" hidden>
+        <p>En tu <strong>iPhone o iPad con Safari</strong>:</p>
+        <ol>
+          <li>Tocá el botón <strong>Compartir</strong> <span class="ios-icon">⬆️</span> en la barra inferior.</li>
+          <li>Deslizá y seleccioná <strong>"Agregar a pantalla de inicio"</strong>.</li>
+          <li>Confirmá tocando <strong>"Agregar"</strong>.</li>
+        </ol>
+        <p class="micro-note">MoveTech aparecerá como una app más en tu pantalla principal.</p>
+      </div>
+      <div id="pwaAndroidHelp" hidden>
+        <p>En tu <strong>Android con Chrome</strong>:</p>
+        <ol>
+          <li>Tocá el menú <strong>⋮</strong> (esquina superior derecha).</li>
+          <li>Seleccioná <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla de inicio"</strong>.</li>
+          <li>Confirmá tocando <strong>"Instalar"</strong>.</li>
+        </ol>
+      </div>
+      <div id="pwaDesktopHelp" hidden>
+        <p>En tu <strong>computadora</strong>:</p>
+        <ol>
+          <li>Buscá el ícono <strong>⊕ Instalar</strong> en la barra de direcciones del navegador.</li>
+          <li>Hacé clic en <strong>"Instalar"</strong>.</li>
+        </ol>
+        <p class="micro-note">Compatible con Chrome, Edge y otros navegadores modernos.</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

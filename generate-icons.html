@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <title>Generador de íconos MoveTech</title>
+  <style>
+    body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; background: #f5f9f7; padding: 30px; max-width: 900px; margin: 0 auto; color: #0f172a; }
+    h1 { color: #16a34a; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-top: 20px; }
+    .icon-box { background: #fff; padding: 16px; border-radius: 14px; box-shadow: 0 4px 12px rgba(15,23,42,0.08); text-align: center; }
+    .icon-box canvas { background: #ddd; border-radius: 12px; max-width: 100%; height: auto; }
+    .icon-box h3 { margin: 10px 0 4px; font-size: 0.95rem; }
+    .icon-box small { color: #64748b; display: block; margin-bottom: 8px; }
+    button { background: #16a34a; color: #fff; border: 0; padding: 8px 14px; border-radius: 999px; font-weight: 600; cursor: pointer; font-size: 0.9rem; }
+    button:hover { background: #15803d; }
+    .actions { margin-top: 20px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .big-btn { background: #2563eb; padding: 14px 24px; font-size: 1rem; }
+    .big-btn:hover { background: #1d4ed8; }
+    .instructions { background: #fff; padding: 20px; border-radius: 14px; margin-top: 24px; border-left: 4px solid #16a34a; }
+    code { background: #ecf4f0; padding: 2px 8px; border-radius: 6px; font-size: 0.9rem; }
+  </style>
+</head>
+<body>
+  <h1>🎨 Generador de íconos MoveTech</h1>
+  <p>Esta página genera los íconos PNG necesarios para que MoveTech funcione como PWA en Android e iOS. <strong>Solo necesitás abrirla una vez.</strong></p>
+
+  <div class="actions">
+    <button class="big-btn" onclick="downloadAll()">⬇️ Descargar TODOS los íconos</button>
+    <button onclick="window.close()">Cerrar</button>
+  </div>
+
+  <div class="instructions">
+    <strong>Instrucciones:</strong>
+    <ol>
+      <li>Clic en <em>"Descargar TODOS los íconos"</em>.</li>
+      <li>Tu navegador descargará 4 archivos PNG.</li>
+      <li>Movélos a la carpeta del proyecto MoveTech (donde está <code>index.html</code>).</li>
+      <li>Listo: refrescá el sitio y la PWA podrá instalarse.</li>
+    </ol>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <script>
+    const ICONS = [
+      { name: 'icon-192.png',          size: 192, padding: 0    },
+      { name: 'icon-512.png',          size: 512, padding: 0    },
+      { name: 'icon-maskable-512.png', size: 512, padding: 0.18 },
+      { name: 'apple-touch-icon.png',  size: 180, padding: 0    }
+    ];
+
+    function drawIcon(canvas, size, padding) {
+      const ctx = canvas.getContext('2d');
+      canvas.width = size;
+      canvas.height = size;
+      ctx.clearRect(0, 0, size, size);
+
+      // Fondo con gradiente
+      const grad = ctx.createLinearGradient(0, 0, size, size);
+      grad.addColorStop(0, '#16a34a');
+      grad.addColorStop(1, '#2563eb');
+      ctx.fillStyle = grad;
+
+      const radius = size * 0.19;
+      const inset = size * padding;
+      roundRect(ctx, inset, inset, size - inset * 2, size - inset * 2, padding > 0 ? radius * 0.6 : radius);
+      ctx.fill();
+
+      // Letra M
+      const fontSize = (size - inset * 2) * 0.55;
+      ctx.fillStyle = '#ffffff';
+      ctx.font = '900 ' + fontSize + 'px -apple-system, Segoe UI, Roboto, sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('M', size / 2, size / 2 + fontSize * 0.05);
+
+      // Check decorativo (solo en íconos sin maskable padding)
+      if (padding === 0) {
+        const cx = size * 0.78;
+        const cy = size * 0.78;
+        const r  = size * 0.10;
+        ctx.fillStyle = '#ffffff';
+        ctx.beginPath();
+        ctx.arc(cx, cy, r, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.strokeStyle = '#16a34a';
+        ctx.lineWidth = size * 0.022;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        ctx.moveTo(cx - r * 0.45, cy);
+        ctx.lineTo(cx - r * 0.10, cy + r * 0.35);
+        ctx.lineTo(cx + r * 0.55, cy - r * 0.35);
+        ctx.stroke();
+      }
+    }
+
+    function roundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.arcTo(x + w, y, x + w, y + h, r);
+      ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r);
+      ctx.arcTo(x, y, x + w, y, r);
+      ctx.closePath();
+    }
+
+    function downloadCanvas(canvas, filename) {
+      canvas.toBlob(blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }, 'image/png');
+    }
+
+    function downloadAll() {
+      ICONS.forEach((cfg, i) => {
+        setTimeout(() => {
+          const canvas = document.getElementById('cv-' + i);
+          downloadCanvas(canvas, cfg.name);
+        }, i * 400);
+      });
+    }
+
+    const grid = document.getElementById('grid');
+    ICONS.forEach((cfg, i) => {
+      const box = document.createElement('div');
+      box.className = 'icon-box';
+      box.innerHTML = `
+        <canvas id="cv-${i}" style="width:160px;height:160px"></canvas>
+        <h3>${cfg.name}</h3>
+        <small>${cfg.size}×${cfg.size}px${cfg.padding ? ' (maskable)' : ''}</small>
+        <button onclick="downloadCanvas(document.getElementById('cv-${i}'),'${cfg.name}')">Descargar</button>
+      `;
+      grid.appendChild(box);
+      const canvas = box.querySelector('canvas');
+      drawIcon(canvas, cfg.size, cfg.padding);
+    });
+  </script>
+</body>
+</html>

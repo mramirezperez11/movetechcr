@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="MoveTech">
+  <defs>
+    <linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%"  stop-color="#16a34a"/>
+      <stop offset="100%" stop-color="#2563eb"/>
+    </linearGradient>
+  </defs>
+  <!-- Fondo seguro para maskable (safe area ~80%) -->
+  <rect width="512" height="512" rx="96" ry="96" fill="url(#g)"/>
+  <!-- Letra M -->
+  <g fill="#ffffff">
+    <path d="M118 358 V 154 h 46 l 92 130 92 -130 h 46 v 204 h -50 v -126 l -68 96 h -40 l -68 -96 v 126 z"/>
+  </g>
+  <!-- Pequeño check decorativo -->
+  <circle cx="402" cy="402" r="46" fill="#ffffff" opacity="0.95"/>
+  <path d="M380 402 l 14 14 l 30 -30" fill="none" stroke="#16a34a" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>
