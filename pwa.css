@@ -36,6 +36,10 @@
 
 * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
+/* Asegurar que el atributo `hidden` siempre oculte elementos,
+   incluso cuando el CSS de la clase use display: flex/grid. */
+[hidden] { display: none !important; }
+
 html, body {
   margin: 0;
   padding: 0;
