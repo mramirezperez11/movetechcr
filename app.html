@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>MoveTech</title>
+  <meta name="description" content="MoveTech — Tu app para moverte más y vivir mejor." />
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.webmanifest" />
+  <meta name="theme-color" content="#16a34a" />
+  <meta name="color-scheme" content="light" />
+
+  <!-- iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-title" content="MoveTech" />
+  <link rel="apple-touch-icon" href="apple-touch-icon.png" />
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/svg+xml" href="icon.svg" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png" />
+
+  <link rel="stylesheet" href="pwa.css" />
+
+  <!-- Firebase SDK (compat). Si firebase-config.js no está completo, queda inactivo. -->
+  <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-app-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-auth-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
+  <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js"></script>
+  <script defer src="firebase-config.js"></script>
+</head>
+<body class="app-body">
+
+  <!-- ============ ONBOARDING / CONSENT ============ -->
+  <section class="onboarding" id="onboarding" hidden>
+    <div class="onboard-content">
+      <div class="onboard-logo">M</div>
+      <h1>Bienvenido a MoveTech</h1>
+      <p class="onboard-lead">
+        Una app educativa para reducir el sedentarismo y motivarte a moverte
+        más, mediante retos diarios y consejos de salud.
+      </p>
+
+      <div class="onboard-card">
+        <h3>Consentimiento educativo</h3>
+        <p>
+          Autorizo el uso de mis datos simulados únicamente con fines
+          educativos y de estudio académico. Entiendo que no se expondrán
+          datos sensibles y que esta plataforma <strong>no sustituye la
+          atención profesional en salud</strong>.
+        </p>
+        <label class="ck">
+          <input type="checkbox" id="onbConsentCheck" />
+          <span>Acepto los términos</span>
+        </label>
+      </div>
+
+      <button class="btn-primary btn-block" id="onbContinueBtn" disabled>
+        Aceptar y comenzar
+      </button>
+    </div>
+  </section>
+
+  <!-- ============ MAIN APP ============ -->
+  <div class="app" id="appMain" hidden>
+
+    <!-- HEADER -->
+    <header class="app-header">
+      <div class="header-left">
+        <span class="greet-time" id="greetTime">¡Hola!</span>
+        <span class="greet-name">Usuario MoveTech</span>
+      </div>
+      <div class="header-right">
+        <button class="icon-btn" id="bellBtn" aria-label="Notificaciones">
+          <span>🔔</span>
+          <span class="icon-badge" id="bellBadge" hidden>!</span>
+        </button>
+        <div class="streak-badge" id="streakBadge" title="Días consecutivos">
+          🔥 <span id="streakCount">0</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- SCREENS -->
+    <main class="app-main" id="appMainScroll">
+
+      <!-- ====== HOME ====== -->
+      <section class="screen active" data-screen="home">
+
+        <!-- Daily progress card -->
+        <div class="hero-card">
+          <div class="hero-card-top">
+            <span class="muted">Tu día</span>
+            <span class="muted small" id="todayDate">Hoy</span>
+          </div>
+          <div class="hero-stats">
+            <div class="hs">
+              <strong id="homeChallengesToday">0/5</strong>
+              <span>retos</span>
+            </div>
+            <div class="hs">
+              <strong id="homePointsToday">0</strong>
+              <span>pts hoy</span>
+            </div>
+            <div class="hs">
+              <strong id="homeWater">0/8</strong>
+              <span>vasos</span>
+            </div>
+          </div>
+          <div class="hero-bar">
+            <div class="hero-bar-fill" id="homeProgressBar"></div>
+          </div>
+          <span class="muted small" id="homeProgressLabel">0%</span>
+        </div>
+
+        <!-- Steps card -->
+        <div class="section-title">
+          <h2>Pasos hoy</h2>
+          <button class="link-btn" id="stepsEnableBtn">Activar sensor</button>
+        </div>
+        <div class="steps-card">
+          <div class="steps-top">
+            <span class="steps-emoji">👣</span>
+            <div class="steps-info">
+              <strong id="homeSteps">0</strong>
+              <span class="muted small" id="stepsLabel">0 / 6000 pasos</span>
+            </div>
+          </div>
+          <div class="bar"><div class="bar-fill" id="stepsBar"></div></div>
+          <span class="muted small steps-note">
+            Sumá +5 pts cada 100 pasos · +50 pts al alcanzar la meta.
+          </span>
+        </div>
+
+        <!-- Featured challenge -->
+        <div class="section-title">
+          <h2>Reto destacado</h2>
+          <span class="muted small">Sumá puntos rápido</span>
+        </div>
+        <div class="featured-card" id="featuredCard">
+          <div class="feat-icon" id="featIcon">🚶</div>
+          <div class="feat-info">
+            <h3 id="featTitle">Caminar 5 minutos</h3>
+            <span class="muted small" id="featPts">+20 pts</span>
+          </div>
+          <button class="btn-primary btn-sm" id="featBtn">Completar</button>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="section-title"><h2>Acciones rápidas</h2></div>
+        <div class="quick-grid">
+          <button class="quick-card" id="quickWater">
+            <span class="qc-emoji">💧</span>
+            <span class="qc-label">Tomé agua</span>
+            <span class="qc-sub">+1 vaso · +5 pts</span>
+          </button>
+          <button class="quick-card" id="quickStretch">
+            <span class="qc-emoji">🧘</span>
+            <span class="qc-label">Pausa activa</span>
+            <span class="qc-sub">3 min · +15 pts</span>
+          </button>
+          <button class="quick-card" id="quickEyes">
+            <span class="qc-emoji">👀</span>
+            <span class="qc-label">Descanso visual</span>
+            <span class="qc-sub">20-20-20</span>
+          </button>
+          <button class="quick-card" id="quickTip">
+            <span class="qc-emoji">💡</span>
+            <span class="qc-label">Tip de salud</span>
+            <span class="qc-sub">Información útil</span>
+          </button>
+        </div>
+
+        <!-- Comercios aliados cerca -->
+        <div class="section-title">
+          <h2>Comercios aliados cerca</h2>
+          <button class="link-btn" id="partnersEnableBtn">📍 Activar</button>
+        </div>
+        <div class="partners-list" id="partnersList"></div>
+        <span class="muted small" id="partnersNote">
+          Activá tu ubicación para ver los comercios más cercanos. Datos simulados.
+        </span>
+
+        <!-- Motivational -->
+        <div class="motiv" id="homeMotiv">
+          Pequeños movimientos, grandes cambios.
+        </div>
+
+        <!-- Notifications nudge (if not granted) -->
+        <div class="nudge-card" id="notifNudge" hidden>
+          <div class="nudge-icon">🔔</div>
+          <div class="nudge-text">
+            <h4>Activá las notificaciones</h4>
+            <p>Te recordamos retos y enviamos tips de salud.</p>
+          </div>
+          <button class="btn-primary btn-sm" id="enableNotifBtn">Activar</button>
+        </div>
+      </section>
+
+      <!-- ====== RETOS ====== -->
+      <section class="screen" data-screen="challenges">
+        <div class="section-title">
+          <h2>Retos de hoy</h2>
+          <span class="muted small" id="challengesProgress">0/5 completados</span>
+        </div>
+        <p class="muted">
+          Los retos se renuevan cada día a la medianoche. Completalos para
+          sumar puntos y mantener tu racha.
+        </p>
+        <div class="challenges-list" id="challengesList"></div>
+
+        <div class="section-title"><h2>Retos largos (esta semana)</h2></div>
+        <div class="weekly-list" id="weeklyList"></div>
+      </section>
+
+      <!-- ====== TIPS ====== -->
+      <section class="screen" data-screen="tips">
+        <div class="section-title">
+          <h2>Tip del día</h2>
+          <span class="muted small" id="todayDateTip">Hoy</span>
+        </div>
+        <div class="tip-card big" id="tipOfDay">
+          <span class="tip-cat">Salud</span>
+          <h3>Cargando tip...</h3>
+          <p></p>
+        </div>
+
+        <div class="section-title">
+          <h2>Recibir tips por notificación</h2>
+        </div>
+        <div class="toggle-row">
+          <div>
+            <strong>Notificaciones de tips</strong>
+            <span class="muted small">Recibí información útil mientras usás la app.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="tipsNotifToggle" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="section-title"><h2>Biblioteca de tips</h2></div>
+        <div class="tips-list" id="tipsList"></div>
+      </section>
+
+      <!-- ====== PROGRESO ====== -->
+      <section class="screen" data-screen="progress">
+        <div class="section-title"><h2>Tu progreso</h2></div>
+
+        <div class="big-grid">
+          <div class="big-stat">
+            <span class="bs-emoji">🔥</span>
+            <strong id="statStreak">0</strong>
+            <span class="muted small">Racha (días)</span>
+          </div>
+          <div class="big-stat">
+            <span class="bs-emoji">⭐</span>
+            <strong id="statPoints">0</strong>
+            <span class="muted small">Puntos totales</span>
+          </div>
+          <div class="big-stat">
+            <span class="bs-emoji">🎯</span>
+            <strong id="statChallenges">0</strong>
+            <span class="muted small">Retos completados</span>
+          </div>
+          <div class="big-stat">
+            <span class="bs-emoji">📖</span>
+            <strong id="statCapsules">0</strong>
+            <span class="muted small">Tips leídos</span>
+          </div>
+          <div class="big-stat">
+            <span class="bs-emoji">👣</span>
+            <strong id="statSteps">0</strong>
+            <span class="muted small">Pasos totales</span>
+          </div>
+          <div class="big-stat tappable" id="shareProgressBtn">
+            <span class="bs-emoji">📤</span>
+            <strong>Compartir</strong>
+            <span class="muted small">Tu progreso</span>
+          </div>
+        </div>
+
+        <div class="section-title"><h2>Nivel</h2></div>
+        <div class="level-card">
+          <div class="level-head">
+            <span class="level-pill" id="levelPill">Nivel 1</span>
+            <span class="muted small" id="levelNext">A 100 pts del Nivel 2</span>
+          </div>
+          <div class="bar"><div class="bar-fill" id="levelBar"></div></div>
+        </div>
+
+        <div class="section-title"><h2>Logros</h2></div>
+        <div class="badges-grid" id="badgesGrid"></div>
+
+        <div class="section-title"><h2>Tiempo en la app hoy</h2></div>
+        <div class="screen-time-card">
+          <div>
+            <strong id="screenTimeToday">0 min</strong>
+            <span class="muted small">Hoy frente a MoveTech</span>
+          </div>
+          <span class="muted small" id="screenTimeNote">
+            Te avisamos si superás 10 minutos seguidos.
+          </span>
+        </div>
+      </section>
+
+      <!-- ====== PERFIL ====== -->
+      <section class="screen" data-screen="profile">
+        <div class="profile-head">
+          <div class="avatar">U</div>
+          <div>
+            <h3>Usuario MoveTech</h3>
+            <span class="muted small">Cuenta simulada · educativa</span>
+          </div>
+        </div>
+
+        <div class="section-title"><h2>Configuración</h2></div>
+
+        <div class="toggle-row">
+          <div>
+            <strong>Notificaciones</strong>
+            <span class="muted small" id="notifStatus">Estado desconocido</span>
+          </div>
+          <button class="btn-ghost btn-sm" id="reqNotifBtn">Activar</button>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <strong>Aviso de descanso 20-20-20</strong>
+            <span class="muted small">Cada 20 min mirar a 6 m por 20 seg.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="eyeBreakToggle" />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <strong>Vibración al completar reto</strong>
+            <span class="muted small">Solo Android.</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="vibrateToggle" checked />
+            <span class="slider"></span>
+          </label>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <strong>Meta de retos diaria</strong>
+            <span class="muted small">Cuántos retos querés completar al día.</span>
+          </div>
+          <select id="dailyGoal" class="select-sm">
+            <option value="3">3</option>
+            <option value="5" selected>5</option>
+            <option value="7">7</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <strong>Meta de vasos de agua</strong>
+            <span class="muted small">8 vasos es la referencia general.</span>
+          </div>
+          <select id="waterGoal" class="select-sm">
+            <option value="6">6</option>
+            <option value="8" selected>8</option>
+            <option value="10">10</option>
+          </select>
+        </div>
+
+        <div class="section-title"><h2>Nube y sincronización</h2></div>
+
+        <div class="toggle-row">
+          <div>
+            <strong>Sincronización (Firebase)</strong>
+            <span class="muted small" id="fbStatus">No configurado</span>
+          </div>
+          <button class="btn-ghost btn-sm" id="syncBtn">Activar</button>
+        </div>
+
+        <div class="toggle-row">
+          <div>
+            <strong>Push notifications reales</strong>
+            <span class="muted small" id="pushStatus">Sin activar</span>
+          </div>
+          <button class="btn-ghost btn-sm" id="pushBtn">Activar</button>
+        </div>
+
+        <p class="muted small">
+          La sincronización guarda tu progreso en la nube de forma anónima
+          para que persista entre dispositivos. Push notifications reales
+          requieren configuración previa (ver <code>SETUP-FIREBASE.md</code>).
+        </p>
+
+        <div class="section-title"><h2>Datos</h2></div>
+
+        <div class="profile-item">
+          <span class="muted small">Consentimiento</span>
+          <p id="profileConsent">Aceptado</p>
+        </div>
+
+        <button class="btn-ghost btn-block" id="resetProgressBtn">
+          Reiniciar progreso
+        </button>
+        <button class="btn-danger btn-block" id="clearAllBtn">
+          Borrar datos y consentimiento
+        </button>
+
+        <div class="section-title"><h2>Acerca de</h2></div>
+        <p class="muted small">
+          MoveTech es un prototipo académico estudiantil. No sustituye atención
+          médica ni nutricional. Fuente: Ministerio de Salud de Costa Rica —
+          Informe Anual de Incidencia de Obesidad 2024.
+        </p>
+        <p class="muted small">
+          Versión 1.0 · Colegio Miravalle, Costa Rica.
+        </p>
+      </section>
+    </main>
+
+    <!-- BOTTOM TAB BAR -->
+    <nav class="tabbar" id="tabbar">
+      <button class="tab active" data-go="home">
+        <span class="tab-icon">🏠</span>
+        <span class="tab-lbl">Inicio</span>
+      </button>
+      <button class="tab" data-go="challenges">
+        <span class="tab-icon">🎯</span>
+        <span class="tab-lbl">Retos</span>
+      </button>
+      <button class="tab" data-go="tips">
+        <span class="tab-icon">💡</span>
+        <span class="tab-lbl">Tips</span>
+      </button>
+      <button class="tab" data-go="progress">
+        <span class="tab-icon">📊</span>
+        <span class="tab-lbl">Progreso</span>
+      </button>
+      <button class="tab" data-go="profile">
+        <span class="tab-icon">👤</span>
+        <span class="tab-lbl">Perfil</span>
+      </button>
+    </nav>
+  </div>
+
+  <!-- ============ TOAST ============ -->
+  <div class="toast" id="appToast"></div>
+
+  <!-- ============ MODAL: 20-20-20 break ============ -->
+  <div class="modal" id="eyeModal" hidden>
+    <div class="modal-content">
+      <div class="modal-icon">👀</div>
+      <h3>Descanso visual</h3>
+      <p>Mirá algo a <strong>6 metros</strong> de distancia durante <strong>20 segundos</strong>.</p>
+      <div class="countdown" id="eyeCount">20</div>
+      <button class="btn-ghost btn-block" id="eyeSkip">Cerrar</button>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: Screen time break ============ -->
+  <div class="modal" id="screenTimeModal" hidden>
+    <div class="modal-content">
+      <div class="modal-icon">⏰</div>
+      <h3>¡Llevás 10 minutos en pantalla!</h3>
+      <p>Te sugerimos un reto rápido para moverte un poco:</p>
+      <div class="modal-suggest" id="stSuggest">
+        <strong>Caminar 5 minutos</strong>
+        <span>+20 pts</span>
+      </div>
+      <button class="btn-primary btn-block" id="stDoIt">Hacer este reto</button>
+      <button class="btn-ghost btn-block" id="stLater">Más tarde</button>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: Mood tracker ============ -->
+  <div class="modal" id="moodModal" hidden>
+    <div class="modal-content">
+      <div class="modal-icon">😊</div>
+      <h3>¿Cómo te sentís?</h3>
+      <p>Después de tu reto, ¿cómo te sentís?</p>
+      <div class="mood-grid">
+        <button class="mood-btn" data-mood="1">😞</button>
+        <button class="mood-btn" data-mood="2">😐</button>
+        <button class="mood-btn" data-mood="3">🙂</button>
+        <button class="mood-btn" data-mood="4">😀</button>
+        <button class="mood-btn" data-mood="5">🤩</button>
+      </div>
+      <button class="btn-ghost btn-block" id="moodSkip">Omitir</button>
+    </div>
+  </div>
+
+  <!-- ============ MODAL: Tip / capsule reader ============ -->
+  <div class="modal" id="tipModal" hidden>
+    <div class="modal-content tip-modal">
+      <button class="modal-close" id="tipModalClose" aria-label="Cerrar">×</button>
+      <span class="tip-cat" id="tipModalCat">Salud</span>
+      <h3 id="tipModalTitle">Título</h3>
+      <p id="tipModalBody">Contenido</p>
+      <span class="muted micro-note">
+        Información general educativa. No sustituye atención profesional.
+      </span>
+    </div>
+  </div>
+
+  <script defer src="pwa.js"></script>
+</body>
+</html>

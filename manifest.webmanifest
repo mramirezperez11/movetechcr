@@ -2,8 +2,8 @@
   "name": "MoveTech — Tecnología para moverse más",
   "short_name": "MoveTech",
   "description": "Propuesta estudiantil para reducir el sedentarismo y prevenir la obesidad en Costa Rica. Retos saludables, puntos, recompensas y cápsulas educativas.",
-  "id": "/",
-  "start_url": "./index.html?source=pwa",
+  "id": "/movetech-app",
+  "start_url": "./app.html?source=pwa",
   "scope": "./",
   "display": "standalone",
   "orientation": "portrait",
@@ -49,14 +49,21 @@
       "name": "Retos del día",
       "short_name": "Retos",
       "description": "Ir directo a los retos saludables",
-      "url": "./index.html?screen=challenges",
+      "url": "./app.html?screen=challenges",
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     },
     {
-      "name": "Mis puntos",
-      "short_name": "Puntos",
-      "description": "Ver puntos y nivel",
-      "url": "./index.html?screen=points",
+      "name": "Tips de salud",
+      "short_name": "Tips",
+      "description": "Consejos rápidos de salud",
+      "url": "./app.html?screen=tips",
+      "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Mi progreso",
+      "short_name": "Progreso",
+      "description": "Ver puntos, nivel y logros",
+      "url": "./app.html?screen=progress",
       "icons": [{ "src": "icon-192.png", "sizes": "192x192" }]
     }
   ]

@@ -379,6 +379,20 @@ a { color: inherit; text-decoration: none; }
 }
 .section-sub { color: var(--text-soft); margin: 0; font-size: 1.02rem; }
 
+.open-app-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 22px;
+}
+.open-app-note {
+  margin: 14px auto 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+  max-width: 560px;
+}
+
 /* ============================ GRIDS ============================ */
 .grid { display: grid; gap: 22px; }
 .grid-2 { grid-template-columns: repeat(2, 1fr); }

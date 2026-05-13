@@ -3,12 +3,16 @@
    Caché de app shell + estrategia network-first
 ===================================================== */
 
-const CACHE_NAME = 'movetech-v1.0.0';
+const CACHE_NAME = 'movetech-v1.2.0';
 const APP_SHELL = [
   './',
   './index.html',
+  './app.html',
   './styles.css',
+  './pwa.css',
   './app.js',
+  './pwa.js',
+  './firebase-config.js',
   './manifest.webmanifest',
   './icon.svg',
   './icon-192.png',
@@ -53,7 +57,8 @@ self.addEventListener('fetch', event => {
   // Solo GET
   if (req.method !== 'GET') return;
 
-  // Para navegación: network-first, fallback al index cacheado (modo offline)
+  // Para navegación: network-first, fallback al cacheado (modo offline).
+  // Si la URL pide app.html, fallback a app.html; si no, fallback a index.html.
   if (req.mode === 'navigate') {
     event.respondWith(
       fetch(req)
@@ -62,7 +67,12 @@ self.addEventListener('fetch', event => {
           caches.open(CACHE_NAME).then(cache => cache.put(req, copy));
           return res;
         })
-        .catch(() => caches.match('./index.html'))
+        .catch(() => {
+          const url = new URL(req.url);
+          const isApp = url.pathname.endsWith('app.html');
+          return caches.match(isApp ? './app.html' : './index.html')
+            .then(r => r || caches.match('./index.html'));
+        })
     );
     return;
   }
@@ -87,4 +97,50 @@ self.addEventListener('message', event => {
   if (event.data && event.data.type === 'SKIP_WAITING') {
     self.skipWaiting();
   }
+});
+
+/* ---------------- Push event (FCM / Web Push) ---------------- */
+self.addEventListener('push', event => {
+  let payload = {};
+  try {
+    payload = event.data ? event.data.json() : {};
+  } catch {
+    payload = { notification: { title: 'MoveTech', body: event.data ? event.data.text() : '' } };
+  }
+  const n = payload.notification || payload;
+  const title = n.title || 'MoveTech';
+  const options = {
+    body: n.body || '',
+    icon: 'icon-192.png',
+    badge: 'icon-192.png',
+    vibrate: [120, 60, 120],
+    tag: (payload.data && payload.data.tag) || 'movetech',
+    data: payload.data || {},
+    actions: [
+      { action: 'open', title: 'Abrir app' },
+      { action: 'close', title: 'Cerrar' }
+    ]
+  };
+  event.waitUntil(self.registration.showNotification(title, options));
+});
+
+/* ---------------- Click en notificación ---------------- */
+self.addEventListener('notificationclick', event => {
+  event.notification.close();
+  if (event.action === 'close') return;
+
+  const targetUrl = (event.notification.data && event.notification.data.url) || './app.html';
+  event.waitUntil(
+    self.clients.matchAll({ type: 'window', includeUncontrolled: true }).then(list => {
+      // Si hay una ventana abierta, enfocarla
+      for (const client of list) {
+        if (client.url.includes('app.html') && 'focus' in client) {
+          return client.focus();
+        }
+      }
+      if (self.clients.openWindow) {
+        return self.clients.openWindow(targetUrl);
+      }
+    })
+  );
 });
