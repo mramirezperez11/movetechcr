@@ -447,6 +447,34 @@
 })();
 
 /* =====================================================
+   QR CODE — Generar QR de descarga de la app
+   Estrategia simple: usar api.qrserver.com directo.
+   No requiere librerías externas ni CDN de JS.
+===================================================== */
+(function () {
+  'use strict';
+
+  function setQR() {
+    const img = document.getElementById('qrImg');
+    if (!img) {
+      console.warn('[QR] elemento qrImg no encontrado');
+      return;
+    }
+    const appUrl = new URL('app.html', window.location.href).href;
+    const data = encodeURIComponent(appUrl);
+    img.src = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&margin=4&data=' + data;
+    img.title = appUrl;
+    console.log('[QR] generado para:', appUrl);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setQR);
+  } else {
+    setQR();
+  }
+})();
+
+/* =====================================================
    PWA — Service Worker + Install Prompt
 ===================================================== */
 (function () {

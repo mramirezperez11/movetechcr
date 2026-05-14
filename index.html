@@ -474,18 +474,34 @@
           Esta es una simulación interactiva. Todos los datos se guardan en tu
           navegador (localStorage) y son únicamente con fines educativos.
         </p>
-        <div class="open-app-actions">
-          <a href="app.html" class="btn btn-primary" target="_blank" rel="noopener">
-            🚀 Abrir app completa
-          </a>
-          <a href="app.html" class="btn btn-ghost">
-            Ver en esta pestaña
-          </a>
+        <div class="open-app-grid">
+          <!-- Columna A: botones -->
+          <div class="open-app-buttons">
+            <h3 class="open-app-subtitle">💻 Desde esta computadora</h3>
+            <a href="app.html" class="btn btn-primary" target="_blank" rel="noopener">
+              🚀 Abrir app completa
+            </a>
+            <a href="app.html" class="btn btn-ghost">
+              Ver en esta pestaña
+            </a>
+            <p class="open-app-note">
+              La app abre en pantalla independiente, con retos, racha,
+              notificaciones, tiempo en pantalla y todas las funciones móviles.
+            </p>
+          </div>
+
+          <!-- Columna B: QR -->
+          <div class="open-app-qr">
+            <h3 class="open-app-subtitle">📱 Desde tu celular</h3>
+            <div class="qr-frame">
+              <img id="qrImg" alt="QR para descargar MoveTech" width="200" height="200" />
+            </div>
+            <p class="open-app-note">
+              Escaneá el código con la cámara de tu celular Android o iPhone.
+              Se abrirá la app lista para instalar.
+            </p>
+          </div>
         </div>
-        <p class="open-app-note">
-          La app completa abre en pantalla independiente, con retos, racha,
-          notificaciones, tiempo en pantalla y todas las funciones móviles.
-        </p>
       </div>
 
       <div class="phone-wrapper">
