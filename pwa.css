@@ -654,6 +654,27 @@ button { font-family: inherit; }
 }
 .screen-time-card strong { font-size: 1.4rem; display: block; }
 
+/* ============================ CHART CARDS ============================ */
+.chart-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  box-shadow: var(--shadow-sm);
+}
+.chart-card h4 {
+  margin: 0 0 12px;
+  font-size: 0.95rem;
+  color: var(--text);
+  font-weight: 700;
+}
+.chart-wrap {
+  position: relative;
+  height: 180px;
+  width: 100%;
+}
+
 /* ============================ PERFIL ============================ */
 .profile-head {
   display: flex;
@@ -748,6 +769,16 @@ button { font-family: inherit; }
 .btn-danger:hover { background: #fee2e2; }
 .btn-block { width: 100%; margin-top: 10px; }
 .btn-sm { padding: 8px 16px; font-size: 0.85rem; }
+
+/* Botón en estado "activado" (verde sólido, sin acción) */
+.btn-active {
+  background: var(--green-100) !important;
+  color: var(--green-600) !important;
+  border-color: var(--green-500) !important;
+  cursor: default !important;
+  opacity: 1 !important;
+}
+.btn-active:hover { background: var(--green-100) !important; }
 
 /* ============================ TOAST ============================ */
 .toast {

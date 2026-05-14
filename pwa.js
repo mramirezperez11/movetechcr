@@ -112,6 +112,8 @@
     stepsToday: 0,
     stepsDate: null,
     totalSteps: 0,
+    // Historial diario: { "2026-5-13": {points, challenges, steps, water} }
+    daily: {},
     location: null,           // { lat, lng, ts }
     locationGranted: false,
     motionGranted: false,
@@ -181,6 +183,21 @@
   function ensureDailyReset() {
     const tk = todayKey();
     if (state.todayKey !== tk) {
+      // Guardar snapshot del día anterior antes de resetear
+      if (state.todayKey) {
+        if (!state.daily) state.daily = {};
+        state.daily[state.todayKey] = {
+          points: state.todayPoints || 0,
+          challenges: (state.todayChallenges || []).length,
+          steps: state.stepsToday || 0,
+          water: state.waterToday || 0
+        };
+        // Mantener solo últimos 30 días en memoria
+        const keys = Object.keys(state.daily).sort();
+        if (keys.length > 30) {
+          keys.slice(0, keys.length - 30).forEach(k => delete state.daily[k]);
+        }
+      }
       // Actualizar racha
       if (state.streakLastUpdate === yesterdayKey() && (state.todayChallenges || []).length > 0) {
         // ya manejado más abajo
@@ -1425,7 +1442,205 @@
   };
 
   /* ============================
-     29. INIT
+     29. GRÁFICOS HISTÓRICOS (Chart.js)
+  ============================ */
+
+  let chartPoints = null, chartChallenges = null, chartSteps = null, chartWater = null;
+
+  function getLast7Days() {
+    const out = [];
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const key = d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate();
+      const label = d.toLocaleDateString('es-CR', { weekday: 'short', day: 'numeric' });
+      out.push({ key, label });
+    }
+    return out;
+  }
+
+  function getDailyData() {
+    const days = getLast7Days();
+    const todayK = todayKey();
+    return days.map(d => {
+      // Si es hoy, usar valores actuales del estado
+      if (d.key === todayK) {
+        return {
+          label: d.label + ' (hoy)',
+          points: state.todayPoints || 0,
+          challenges: (state.todayChallenges || []).length,
+          steps: state.stepsToday || 0,
+          water: state.waterToday || 0
+        };
+      }
+      const snap = (state.daily || {})[d.key] || {};
+      return {
+        label: d.label,
+        points: snap.points || 0,
+        challenges: snap.challenges || 0,
+        steps: snap.steps || 0,
+        water: snap.water || 0
+      };
+    });
+  }
+
+  function chartConfig(type, labels, data, color, bg) {
+    return {
+      type,
+      data: {
+        labels,
+        datasets: [{
+          data,
+          backgroundColor: bg,
+          borderColor: color,
+          borderWidth: 2,
+          borderRadius: 6,
+          tension: 0.3,
+          fill: type === 'line',
+          pointBackgroundColor: color,
+          pointRadius: 4,
+          pointHoverRadius: 6
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0f172a',
+            padding: 10,
+            cornerRadius: 8
+          }
+        },
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: { color: 'rgba(15, 23, 42, 0.06)' },
+            ticks: { color: '#94a3b8', font: { size: 10 } }
+          },
+          x: {
+            grid: { display: false },
+            ticks: { color: '#94a3b8', font: { size: 10 } }
+          }
+        }
+      }
+    };
+  }
+
+  function renderCharts() {
+    if (typeof Chart === 'undefined') return;
+    const screen = document.querySelector('.screen.active');
+    if (!screen || screen.dataset.screen !== 'progress') return;
+
+    const rows = getDailyData();
+    const labels = rows.map(r => r.label);
+
+    // Puntos por día - bar chart verde
+    if (chartPoints) chartPoints.destroy();
+    const ctx1 = document.getElementById('chartPoints');
+    if (ctx1) {
+      chartPoints = new Chart(ctx1, chartConfig(
+        'bar', labels, rows.map(r => r.points),
+        '#16a34a', 'rgba(22, 163, 74, 0.7)'
+      ));
+    }
+
+    // Retos por día - bar chart azul
+    if (chartChallenges) chartChallenges.destroy();
+    const ctx2 = document.getElementById('chartChallenges');
+    if (ctx2) {
+      chartChallenges = new Chart(ctx2, chartConfig(
+        'bar', labels, rows.map(r => r.challenges),
+        '#2563eb', 'rgba(37, 99, 235, 0.7)'
+      ));
+    }
+
+    // Pasos - line chart naranja
+    if (chartSteps) chartSteps.destroy();
+    const ctx3 = document.getElementById('chartSteps');
+    if (ctx3) {
+      chartSteps = new Chart(ctx3, chartConfig(
+        'line', labels, rows.map(r => r.steps),
+        '#f97316', 'rgba(249, 115, 22, 0.15)'
+      ));
+    }
+
+    // Agua - bar chart celeste
+    if (chartWater) chartWater.destroy();
+    const ctx4 = document.getElementById('chartWater');
+    if (ctx4) {
+      chartWater = new Chart(ctx4, chartConfig(
+        'bar', labels, rows.map(r => r.water),
+        '#0ea5e9', 'rgba(14, 165, 233, 0.6)'
+      ));
+    }
+  }
+
+  // Hook al render de progreso
+  const _renderProgress3 = renderProgress;
+  renderProgress = function () {
+    _renderProgress3();
+    // Esperar un tick para que Chart.js esté disponible y el DOM listo
+    setTimeout(renderCharts, 50);
+  };
+
+  /* ============================
+     30. FIX COSMÉTICO: botones "Activar" → "Activado"
+  ============================ */
+
+  function refreshActivateButtons() {
+    // Notificaciones
+    const notifBtn = document.getElementById('reqNotifBtn');
+    if (notifBtn) {
+      if (notifPermitted()) {
+        notifBtn.textContent = '✓ Activadas';
+        notifBtn.classList.add('btn-active');
+        notifBtn.disabled = true;
+      } else {
+        notifBtn.textContent = 'Activar';
+        notifBtn.classList.remove('btn-active');
+        notifBtn.disabled = false;
+      }
+    }
+    // Sync Firebase
+    const syncBtn = document.getElementById('syncBtn');
+    if (syncBtn) {
+      if (state.settings.syncEnabled && firebaseEnabled()) {
+        syncBtn.textContent = '✓ Activado';
+        syncBtn.classList.add('btn-active');
+        syncBtn.disabled = true;
+      } else {
+        syncBtn.textContent = 'Activar';
+        syncBtn.classList.remove('btn-active');
+        syncBtn.disabled = false;
+      }
+    }
+    // Push notifications
+    const pushBtn = document.getElementById('pushBtn');
+    if (pushBtn) {
+      if (state.settings.pushEnabled) {
+        pushBtn.textContent = '✓ Activadas';
+        pushBtn.classList.add('btn-active');
+        pushBtn.disabled = true;
+      } else {
+        pushBtn.textContent = 'Activar';
+        pushBtn.classList.remove('btn-active');
+        pushBtn.disabled = false;
+      }
+    }
+  }
+
+  // Hook al render de perfil
+  const _renderProfile2 = renderProfile;
+  renderProfile = function () {
+    _renderProfile2();
+    refreshActivateButtons();
+  };
+
+  /* ============================
+     31. INIT
   ============================ */
 
   function init() {

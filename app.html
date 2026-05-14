@@ -29,6 +29,9 @@
   <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-firestore-compat.js"></script>
   <script defer src="https://www.gstatic.com/firebasejs/10.7.0/firebase-messaging-compat.js"></script>
   <script defer src="firebase-config.js"></script>
+
+  <!-- Chart.js para gráficos de progreso histórico -->
+  <script defer src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 </head>
 <body class="app-body">
 
@@ -302,6 +305,32 @@
           <span class="muted small" id="screenTimeNote">
             Te avisamos si superás 10 minutos seguidos.
           </span>
+        </div>
+
+        <!-- ==== GRÁFICOS HISTÓRICOS ==== -->
+        <div class="section-title">
+          <h2>Historial (últimos 7 días)</h2>
+          <span class="muted small" id="chartsNote">Datos diarios</span>
+        </div>
+
+        <div class="chart-card">
+          <h4>Puntos por día ⭐</h4>
+          <div class="chart-wrap"><canvas id="chartPoints"></canvas></div>
+        </div>
+
+        <div class="chart-card">
+          <h4>Retos completados 🎯</h4>
+          <div class="chart-wrap"><canvas id="chartChallenges"></canvas></div>
+        </div>
+
+        <div class="chart-card">
+          <h4>Pasos diarios 👣</h4>
+          <div class="chart-wrap"><canvas id="chartSteps"></canvas></div>
+        </div>
+
+        <div class="chart-card">
+          <h4>Vasos de agua 💧</h4>
+          <div class="chart-wrap"><canvas id="chartWater"></canvas></div>
         </div>
       </section>
 
