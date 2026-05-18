@@ -3,7 +3,7 @@
    Caché de app shell + estrategia network-first
 ===================================================== */
 
-const CACHE_NAME = 'movetech-v1.7.0';
+const CACHE_NAME = 'movetech-v1.8.0';
 const APP_SHELL = [
   './',
   './index.html',

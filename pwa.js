@@ -437,7 +437,7 @@
     if (!onbCheck.checked) return;
     state.consent = true;
     save();
-    showApp();
+    startAppExperience();
     setTimeout(() => {
       toast('¡Bienvenido a MoveTech!', 'success');
       // Notificación de bienvenida
@@ -446,6 +446,21 @@
       }
     }, 300);
   });
+
+  /* Inicia toda la experiencia post-consentimiento.
+     Se llama desde init() (si ya hay consent) y desde el handler del
+     botón "Aceptar y comenzar" (cuando se da consent en esta sesión). */
+  function startAppExperience() {
+    state.todayKey = state.todayKey || todayKey();
+    save();
+    showApp();
+    dailyReminderIfNeeded();
+    if (state.settings.eyeBreakEnabled) startEyeBreakTimer();
+    if (state.settings.tipsNotifEnabled) startTipsNotifications();
+    if (state.motionGranted) attachMotion();
+    checkBadges();
+    initFirebase();
+  }
 
   /* ============================
      10. RENDER GENERAL
@@ -1769,17 +1784,9 @@
   ============================ */
 
   function init() {
-    // Si ya dio consentimiento, ir directo a la app
+    // Si ya dio consentimiento, arrancar la experiencia completa
     if (state.consent) {
-      state.todayKey = state.todayKey || todayKey();
-      save();
-      showApp();
-      dailyReminderIfNeeded();
-      if (state.settings.eyeBreakEnabled) startEyeBreakTimer();
-      if (state.settings.tipsNotifEnabled) startTipsNotifications();
-      if (state.motionGranted) attachMotion();
-      checkBadges();
-      initFirebase();
+      startAppExperience();
       return;
     }
     // Si no tiene consentimiento y NO está instalada como PWA → mostrar pantalla de instalación primero
