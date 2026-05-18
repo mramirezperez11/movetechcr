@@ -319,21 +319,116 @@
      9. ONBOARDING / CONSENT
   ============================ */
 
-  const onboardingEl = document.getElementById('onboarding');
-  const appMainEl    = document.getElementById('appMain');
-  const onbCheck     = document.getElementById('onbConsentCheck');
-  const onbBtn       = document.getElementById('onbContinueBtn');
+  const installScreenEl = document.getElementById('installScreen');
+  const onboardingEl    = document.getElementById('onboarding');
+  const appMainEl       = document.getElementById('appMain');
+  const onbCheck        = document.getElementById('onbConsentCheck');
+  const onbBtn          = document.getElementById('onbContinueBtn');
+
+  function hideAll() {
+    if (installScreenEl) installScreenEl.hidden = true;
+    if (onboardingEl)    onboardingEl.hidden    = true;
+    if (appMainEl)       appMainEl.hidden       = true;
+  }
+
+  function showInstallScreen() {
+    hideAll();
+    if (installScreenEl) installScreenEl.hidden = false;
+    setupInstallScreen();
+  }
 
   function showOnboarding() {
-    onboardingEl.hidden = false;
-    appMainEl.hidden = true;
+    hideAll();
+    if (onboardingEl) onboardingEl.hidden = false;
   }
+
   function showApp() {
-    onboardingEl.hidden = true;
-    appMainEl.hidden = false;
+    hideAll();
+    if (appMainEl) appMainEl.hidden = false;
     startScreenTimeTracking();
     render();
   }
+
+  /* ---- Setup pantalla de instalación ---- */
+  let deferredInstallPrompt = null;
+  let installScreenReady = false;
+
+  function isStandalone() {
+    return window.matchMedia('(display-mode: standalone)').matches ||
+           window.navigator.standalone === true;
+  }
+
+  function detectPlatform() {
+    const ua = navigator.userAgent || '';
+    return {
+      isAndroid: /Android/.test(ua),
+      isIOS: /iPad|iPhone|iPod/.test(ua) && !window.MSStream,
+      isDesktop: !/Android|iPad|iPhone|iPod/.test(ua)
+    };
+  }
+
+  function setupInstallScreen() {
+    if (installScreenReady) return;
+    installScreenReady = true;
+
+    const plat = detectPlatform();
+    const androidHelp = document.getElementById('installAndroidHelp');
+    const iosHelp     = document.getElementById('installIosHelp');
+    const desktopHelp = document.getElementById('installDesktopHelp');
+    const promptBtn   = document.getElementById('installPromptBtn');
+    const skipBtn     = document.getElementById('installSkipBtn');
+
+    if (androidHelp) androidHelp.hidden = !plat.isAndroid;
+    if (iosHelp)     iosHelp.hidden     = !plat.isIOS;
+    if (desktopHelp) desktopHelp.hidden = !plat.isDesktop;
+
+    // Si tenemos prompt nativo, mostrar botón
+    if (deferredInstallPrompt && promptBtn) {
+      promptBtn.hidden = false;
+    }
+
+    if (promptBtn) {
+      promptBtn.onclick = async () => {
+        if (!deferredInstallPrompt) return;
+        deferredInstallPrompt.prompt();
+        const choice = await deferredInstallPrompt.userChoice;
+        deferredInstallPrompt = null;
+        promptBtn.hidden = true;
+        if (choice.outcome === 'accepted') {
+          toast('¡App instalada! Abrila desde tu pantalla principal o continuá acá.', 'success');
+          setTimeout(() => proceedFromInstall(), 1200);
+        }
+      };
+    }
+
+    if (skipBtn) {
+      skipBtn.onclick = () => proceedFromInstall();
+    }
+  }
+
+  function proceedFromInstall() {
+    if (state.consent) {
+      showApp();
+    } else {
+      showOnboarding();
+    }
+  }
+
+  // Capturar evento de instalación (Chrome/Edge/Android)
+  window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    deferredInstallPrompt = e;
+    const promptBtn = document.getElementById('installPromptBtn');
+    if (promptBtn && installScreenEl && !installScreenEl.hidden) {
+      promptBtn.hidden = false;
+    }
+  });
+
+  // Detectar instalación exitosa
+  window.addEventListener('appinstalled', () => {
+    toast('App instalada correctamente', 'success');
+    setTimeout(() => proceedFromInstall(), 800);
+  });
 
   onbCheck.addEventListener('change', () => {
     onbBtn.disabled = !onbCheck.checked;
@@ -1590,6 +1685,35 @@
      30. FIX COSMÉTICO: botones "Activar" → "Activado"
   ============================ */
 
+  /* Mostrar/copiar token FCM en Perfil */
+  function refreshTokenRow() {
+    const row = document.getElementById('tokenRow');
+    if (!row) return;
+    if (state.fcmToken) {
+      row.hidden = false;
+    } else {
+      row.hidden = true;
+    }
+  }
+
+  const copyTokenBtn = document.getElementById('copyTokenBtn');
+  if (copyTokenBtn) {
+    copyTokenBtn.addEventListener('click', async () => {
+      if (!state.fcmToken) {
+        toast('Activá push notifications primero', 'info');
+        return;
+      }
+      try {
+        await navigator.clipboard.writeText(state.fcmToken);
+        toast('Token copiado al portapapeles', 'success');
+      } catch (err) {
+        console.warn('clipboard:', err);
+        // Fallback con prompt para copiar manualmente
+        prompt('Copiá este token FCM:', state.fcmToken);
+      }
+    });
+  }
+
   function refreshActivateButtons() {
     // Notificaciones
     const notifBtn = document.getElementById('reqNotifBtn');
@@ -1637,6 +1761,7 @@
   renderProfile = function () {
     _renderProfile2();
     refreshActivateButtons();
+    refreshTokenRow();
   };
 
   /* ============================
@@ -1644,19 +1769,26 @@
   ============================ */
 
   function init() {
-    if (!state.consent) {
-      showOnboarding();
+    // Si ya dio consentimiento, ir directo a la app
+    if (state.consent) {
+      state.todayKey = state.todayKey || todayKey();
+      save();
+      showApp();
+      dailyReminderIfNeeded();
+      if (state.settings.eyeBreakEnabled) startEyeBreakTimer();
+      if (state.settings.tipsNotifEnabled) startTipsNotifications();
+      if (state.motionGranted) attachMotion();
+      checkBadges();
+      initFirebase();
       return;
     }
-    state.todayKey = state.todayKey || todayKey();
-    save();
-    showApp();
-    dailyReminderIfNeeded();
-    if (state.settings.eyeBreakEnabled) startEyeBreakTimer();
-    if (state.settings.tipsNotifEnabled) startTipsNotifications();
-    if (state.motionGranted) attachMotion();
-    checkBadges();
-    initFirebase();
+    // Si no tiene consentimiento y NO está instalada como PWA → mostrar pantalla de instalación primero
+    if (!isStandalone()) {
+      showInstallScreen();
+      return;
+    }
+    // Está instalada como PWA pero falta consentimiento → onboarding
+    showOnboarding();
   }
 
   init();

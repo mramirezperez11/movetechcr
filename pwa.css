@@ -55,6 +55,98 @@ html, body {
 
 button { font-family: inherit; }
 
+/* ============================ INSTALL SCREEN ============================ */
+.install-screen {
+  position: fixed;
+  inset: 0;
+  background: linear-gradient(160deg, #ffffff 0%, var(--green-100) 100%);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 24px 20px;
+  padding-top: calc(24px + env(safe-area-inset-top));
+  padding-bottom: calc(24px + env(safe-area-inset-bottom));
+  z-index: 55;
+  overflow-y: auto;
+}
+.install-content {
+  max-width: 460px;
+  width: 100%;
+  text-align: center;
+}
+.install-logo {
+  width: 88px; height: 88px;
+  display: grid; place-items: center;
+  background: var(--gradient);
+  color: #fff;
+  border-radius: 22px;
+  font-size: 2.2rem;
+  font-weight: 800;
+  margin: 8px auto 18px;
+  box-shadow: var(--shadow);
+}
+.install-screen h1 {
+  margin: 0 0 8px;
+  font-size: 1.6rem;
+  letter-spacing: -0.02em;
+}
+.install-lead {
+  color: var(--text-soft);
+  margin: 0 0 20px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+.install-benefits {
+  list-style: none;
+  padding: 16px 18px;
+  background: #fff;
+  border-radius: var(--radius);
+  margin: 0 0 20px;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  box-shadow: var(--shadow-sm);
+  font-size: 0.92rem;
+  color: var(--text);
+}
+.install-benefits li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.install-help {
+  background: #fff;
+  border-radius: var(--radius);
+  padding: 18px;
+  text-align: left;
+  margin-bottom: 14px;
+  box-shadow: var(--shadow-sm);
+}
+.install-help h3 {
+  margin: 0 0 12px;
+  font-size: 0.98rem;
+  color: var(--blue-600);
+}
+.install-help ol {
+  margin: 0;
+  padding-left: 22px;
+  color: var(--text-soft);
+  font-size: 0.9rem;
+  line-height: 1.6;
+}
+.install-help ol li { margin-bottom: 6px; }
+.install-help strong { color: var(--text); }
+.install-note {
+  margin: 12px 0 0;
+  padding: 10px 12px;
+  background: #fef3c7;
+  border-left: 3px solid var(--warning);
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #92400e;
+}
+
 /* ============================ ONBOARDING ============================ */
 .onboarding {
   position: fixed;

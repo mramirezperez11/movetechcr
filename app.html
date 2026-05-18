@@ -35,6 +35,71 @@
 </head>
 <body class="app-body">
 
+  <!-- ============ PANTALLA DE INSTALACIÓN (primera, si no está instalada) ============ -->
+  <section class="install-screen" id="installScreen" hidden>
+    <div class="install-content">
+      <div class="install-logo">M</div>
+      <h1>📲 Instalá MoveTech</h1>
+      <p class="install-lead">
+        Para la mejor experiencia, instalá MoveTech como app en tu celular.
+        Funciona en pantalla completa, recibe notificaciones reales y se abre
+        desde tu pantalla de inicio.
+      </p>
+
+      <ul class="install-benefits">
+        <li>✨ Sin barras del navegador</li>
+        <li>🔔 Notificaciones reales</li>
+        <li>⚡ Acceso rápido desde el ícono</li>
+        <li>📶 Funciona sin internet</li>
+      </ul>
+
+      <!-- Botón nativo (si Chrome soporta beforeinstallprompt) -->
+      <button class="btn-primary btn-block" id="installPromptBtn" hidden>
+        📥 Instalar ahora
+      </button>
+
+      <!-- Instrucciones por plataforma -->
+      <div class="install-help" id="installAndroidHelp" hidden>
+        <h3>📱 En tu Android (Chrome)</h3>
+        <ol>
+          <li>Si esta pantalla la abriste desde un escáner QR, tocá los <strong>⋮ tres puntos</strong> y elegí <strong>"Abrir en Chrome"</strong>.</li>
+          <li>Una vez en Chrome, tocá los <strong>⋮ tres puntos</strong> arriba a la derecha.</li>
+          <li>Buscá la opción <strong>"Instalar aplicación"</strong> o <strong>"Agregar a pantalla principal"</strong>.</li>
+          <li>Confirmá tocando <strong>"Instalar"</strong>.</li>
+        </ol>
+        <p class="install-note">
+          ⚠️ NO uses "Descargar página" — esa opción guarda offline pero no instala la app.
+        </p>
+      </div>
+
+      <div class="install-help" id="installIosHelp" hidden>
+        <h3>🍎 En tu iPhone (Safari)</h3>
+        <ol>
+          <li>Aseguráte de estar usando <strong>Safari</strong> (no Chrome iOS).</li>
+          <li>Tocá el botón <strong>Compartir ⬆️</strong> en la barra inferior.</li>
+          <li>Deslizá y seleccioná <strong>"Agregar a pantalla principal"</strong>.</li>
+          <li>Confirmá tocando <strong>"Agregar"</strong>.</li>
+        </ol>
+      </div>
+
+      <div class="install-help" id="installDesktopHelp" hidden>
+        <h3>💻 En tu computadora</h3>
+        <ol>
+          <li>Buscá el ícono <strong>⊕ Instalar</strong> en la barra de direcciones.</li>
+          <li>Hacé clic en <strong>"Instalar"</strong>.</li>
+        </ol>
+      </div>
+
+      <button class="btn-ghost btn-block" id="installSkipBtn">
+        Continuar sin instalar
+      </button>
+
+      <p class="micro-note">
+        Si ya instalaste MoveTech, abrila desde el ícono en tu pantalla principal.
+      </p>
+    </div>
+  </section>
+
   <!-- ============ ONBOARDING / CONSENT ============ -->
   <section class="onboarding" id="onboarding" hidden>
     <div class="onboard-content">
